@@ -159,7 +159,7 @@ For even more information, see the guide to [API keys][apikey].
 }
 ```
 
-15. Copy the text below and paste them into the Sample Utterances box. For German, you need to translate these into German, don't change the first word on each line or the words in curly brackets.
+15. Copy the text below and paste them into the Sample Utterances box. **For German, you need to translate these into German, don't change the first word on each line or the words in curly brackets.**
 ```
 GetCommuteToWork How is my commute
 GetCommuteToWork How is my commute to work
@@ -191,7 +191,8 @@ GetDirectionsFromTo For directions from {fromcity} to {tocity}
 17. You will now be on the "Configuration" page.
 18. Select "AWS Lambda ARN (Amazon Resource Name)" for the skill Endpoint Type.
 19. Then pick the most appropriate geographical region (either US or EU as appropriate) and paste into the box (highlighted in red in the screenshot) the ARN you copied earlier from the AWS Lambda setup.
-20. Select "No" for Account Linking and leave everything under permissions unchecked
+20. Select "No" for Account Linking
+21. Under Permissions, tick the Device Address box, and select Full Address.
 14. Click "Save" and then "Next".
 15. There is no need to go any further through the process i.e. submitting for certification.
 
