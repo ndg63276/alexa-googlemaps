@@ -1,11 +1,64 @@
 from __future__ import print_function
 from botocore.vendored import requests
-
+import googlemaps
+from os import environ
+from datetime import datetime
 
 # --------------- Main handler ------------------
 
 def lambda_handler(event, context):
-    #print(event['context'])
+    if 'session' in event and event['session']['application']['applicationId'] != "amzn1.ask.skill.3b9d626c-fdc8-48d7-87a6-e6a6d988234c":
+        raise ValueError("Invalid Application ID")
+    if event['request']['type'] == "LaunchRequest":
+        return get_help()
+    elif event['request']['type'] == "IntentRequest":
+        return on_intent(event)
+
+def on_intent(event):
+    intent = event['request']['intent']
+    intent_name = event['request']['intent']['name']
+    print("on_intent, session: ")
+    print(event['session'])
+    # Dispatch to your skill's intent handlers
+    if intent_name == "GetDirectionsTo":
+        return get_directions(event)
+    elif intent_name == "GetDirectionsFromTo":
+        return get_directions(event)
+    elif intent_name == "GetCommuteToWork":
+        return get_commute_to_work(event)
+    elif intent_name == "GetCommuteFromWork":
+        return get_commute_from_work(event)
+    elif intent_name == "AMAZON.HelpIntent":
+        return get_help()
+    elif intent_name == "AMAZON.CancelIntent":
+        return do_nothing()
+    elif intent_name == "AMAZON.StopIntent":
+        return do_nothing()
+    else:
+        raise ValueError("Invalid intent")
+
+def get_directions(event):
+    destination = event['request']['intent']['slots']['tocity']['value']
+    if 'fromcity' in event['request']['intent']['slots']:
+        start_address = start_postcode = event['request']['intent']['slots']['fromcity']['value']
+    else:
+        start_address, start_postcode = get_my_address(event)
+    print('start: '+start_address+'; destination: '+destination)
+    return get_duration(start_postcode, destination, start_address)
+    
+def get_commute_to_work(event):
+    start_address, start_postcode = get_my_address(event)
+    destination = get_work_address()
+    print('start: '+start_address+'; destination: '+destination)
+    return get_duration(start_postcode, destination, start_address)
+    
+def get_commute_from_work(event):
+    home_address, destination = get_my_address(event)
+    start_address = start_postcode = get_work_address()
+    print('start: '+start_address+'; destination: '+destination)
+    return get_duration(start_postcode, destination, start_address)
+
+def get_my_address(event):
     try:
         deviceId = event['context']['System']['device']['deviceId']
         print("deviceId is "+deviceId)
@@ -13,26 +66,43 @@ def lambda_handler(event, context):
         print("apiAccessToken is "+apiAccessToken)
         apiEndpoint = event['context']['System']['apiEndpoint']
         print("apiEndpoint is "+apiEndpoint)
+        headers = {'Authorization': 'Bearer '+apiAccessToken}
+        url = apiEndpoint + '/v1/devices/'+deviceId+'/settings/address'
+        r = requests.get(url, headers=headers)
+        print(r.json())
+        return r.json()['addressLine1'], r.json()['postalCode']
     except:
-        deviceId = 'amzn1.ask.device.AF5F5QCLDFWRHP3VEC2LGIJHE24XUZK4V6RMGPN3BUG46L5OFPBQHBLX2LRJYWNW5EW6A6BMJYGRNV2K2TKVNBBRTFDQMI74J3M3R5Y6YC2A5D7L3AK5BTBJWLLWPUHODULN6QZZTG3SNE2FJHGZ7FQ43FDA'
-        apiEndpoint = 'https://api.eu.amazonalexa.com'
-        apiAccessToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IjEifQ.eyJhdWQiOiJodHRwczovL2FwaS5hbWF6b25hbGV4YS5jb20iLCJpc3MiOiJBbGV4YVNraWxsS2l0Iiwic3ViIjoiYW16bjEuYXNrLnNraWxsLjNiOWQ2MjZjLWZkYzgtNDhkNy04N2E2LWU2YTZkOTg4MjM0YyIsImV4cCI6MTUxMTcwNDUxOCwiaWF0IjoxNTExNzAwOTE4LCJuYmYiOjE1MTE3MDA5MTgsInByaXZhdGVDbGFpbXMiOnsiY29uc2VudFRva2VuIjoiQXR6YXxJd0VCSVBDbGl0eEhYRzNMRkhRdk85dm9wcnZ3S1l4dWpZblI0TFMwSDJtUU92UWNVa3JEWlNxYjAtajdEWVdlaVl1MDhtblctTkVNaDNkN1VwclFWcGZlSE0zYWx4bnRVdThyMDdKT1FscTBNbEtSR3JTNXE3d3RPYkRrbHV4N2gwRFAzVDN6QTN6VldxdEc4NTgwSnIzZ3gxQVNka1NVTWNyVVpIRFo4Y2NqSlRoWHBLVTg2TVUxRHl6VkZIU1cwanJkTDRPVTRTblR3X0RVRERuN0tRSDVIQjdQWVJBbWlMWmdlYjNXQTJGSlg3cWdrNDZpUVlYdlRXeUJVamRqcEdSczZPZ0xkTkhncTQxbjJVaWJ5dWRWS0Vtb1VMcjNPTkxXN1pLbDJwZGFobldZT2R6UWNlb0VGOUoxY3lRcy1JQnJQX0lTU21VWk5tNjV2ek1NenhfX1VPUkhkblQwSmFxRmxsN3VlcUpvR01QQUUzQzZ5RUhybi13cmhUT3ZpbFhTdXplb3ZtNmJrTDZSUndzTkEzQ0dHRldTenAwMExRY21NNFRwcl9QRThxVm1fbTF5OE9wbjZLZlFiR0ItTndsbGJzTXdZVDFjZDkzcnNNQjVZcWdOMzgxbkJiQWxGdVNuQ3N0X3U4RGRVVmtDRklocy1qMGtOUDd6XzBnb0ZXZW11aXciLCJkZXZpY2VJZCI6ImFtem4xLmFzay5kZXZpY2UuQUY1RjVRQ0xERldSSFAzVkVDMkxHSUpIRTI0WFVaSzRWNlJNR1BOM0JVRzQ2TDVPRlBCUUhCTFgyTFJKWVdOVzVFVzZBNkJNSllHUk5WMksyVEtWTkJCUlRGRFFNSTc0SjNNM1I1WTZZQzJBNUQ3TDNBSzVCVEJKV0xMV1BVSE9EVUxONlFaWlRHM1NORTJGSkhHWjdGUTQzRkRBIiwidXNlcklkIjoiYW16bjEuYXNrLmFjY291bnQuQUdPUFpMV0VPUFZEVVM3NVdKWE80QUhOUkhETU1KS000SERZTzVFNjVaTDdVN0haTUFFRkNJSFpVVlJESlk2QlZRWUg3VEhBSExBWjM3NVgzVFdHV0k1VVhWSU9NNUpHRzZVU1RRRU1ZWDU3MkdRM01FT05XQ1hJMklZMk5MNlpTTFQyR1FLU1k2VDVGS1ZISUtSVURGWEdMTjZIQllVR0lIWkNLQURUQ1pPSkpKSVk1NTVRWjZWMlFEM0ZBWVFHV0tPS0ozUTQyVldHQUVRIn19.hRrFKZfsuXKNjdZhlynCKHuopqWW6vr-pdmXZKzEcuiwgVhIfkUNXmOOV4n7d0yrV_fCnoIB1pq5DGwJsJEff63RAwi2PGHHCJ0l0HX0iDqTmokiRJPZnarsQf6k6RZVpbdmPJTPEXwUgGRxtzMmTE-z6sMoRCazyQ1fQaycVeogrsGFd6ytTa1GtZ7j1-dAyP46dhKsIF4DkZqMc6LnVimmyl-A5KKFndnA66u261UjNZSK6lZlmMhn0ZZBcT1EEqCyDWOBPCUvU3odP-J4tHJ8ftE4Mv3wVUmf4xQNbD97MR3Uyryoa9ApGq29SVO8WrRu6URBlKsfhBVR6L-mIQ'
-        print("Skipped")
-    headers = {'Authorization': 'Bearer '+apiAccessToken}
-    url = apiEndpoint + '/v1/devices/'+deviceId+'/settings/address'
-    r = requests.get(url, headers=headers)
-    if r.status_code != 200:
-        return permissions_error(r)
-    return say_postcode(r.json()['postalCode'])
-    if 'session' in event and event['session']['application']['applicationId'] != "amzn1.ask.skill.3b9d626c-fdc8-48d7-87a6-e6a6d988234c":
-        raise ValueError("Invalid Application ID")
-    if event['request']['type'] == "LaunchRequest":
-        return get_help()
-    elif event['request']['type'] == "IntentRequest":
-        return on_intent(event['request'], event['session'])
+        return environ['HOME'],environ['HOME']
 
+def get_work_address():
+    return environ['WORK']
 
-# --------------- Helpers that build all of the responses -t---------------------
+def get_duration(start_postcode, end, start_address):
+    gmaps = googlemaps.Client(key=environ['API_KEY'])
+    try:
+        directions_result = gmaps.directions(start_postcode, end, departure_time=datetime.now())
+    except:
+        directions_result = []
+    if len(directions_result) == 0:
+        try:
+            directions_result = gmaps.directions(start_postcode+', '+environ['COUNTRY'], end+', '+environ['COUNTRY'], departure_time=datetime.now())
+        except:
+            directions_result = []
+        if len(directions_result) == 0:   
+            return ask_for_repeat(end)
+    leg = directions_result[0]['legs'][0]
+    duration=leg['duration_in_traffic']['text']
+    summary = directions_result[0]['summary']
+    to_say="Right now, it takes "+duration+" to get from "+start_address+" to "+end+", via "+summary
+    return say_duration(to_say)
+
+def ask_for_repeat(end):
+    speech_output = "I'm sorry, I couldn't find "+end+", could you be more specific?"
+    card_title = 'Google Maps Help'
+    should_end_session = False
+    return build_response(build_speechlet_response(card_title, speech_output, None, should_end_session))
+
+# --------------- Helpers that build all of the responses ----------------------
 
 def build_speechlet_response(title, output, reprompt_text, should_end_session):
     return {
@@ -72,47 +142,23 @@ def build_response(speechlet_response):
 
 # --------------- Functions that control the skill's behavior ------------------
 
-def say_postcode(postcode):
-    speech_output = 'Your postcode is '+postcode
-    card_title = 'Google Maps Help'
+def say_duration(duration):
+    speech_output = duration
+    card_title = 'Google Maps'
     should_end_session = True
     return build_response(build_speechlet_response(card_title, speech_output, None, should_end_session))
 
 def get_help():
-    speech_output = 'OK'
-    card_title = 'Google Maps Help'
-    should_end_session = True
+    speech_output = 'Welcome to Google Maps'
+    card_title = 'Google Maps'
+    should_end_session = False
     return build_response(build_speechlet_response(card_title, speech_output, None, should_end_session))
 
 def permissions_error(r):
     speech_output = 'Sorry, I do not know your address. Please check the settings in the Alexa app.'
-    card_title = 'Google Maps error '+r.status_code
+    card_title = 'Google Maps error '+str(r.status_code)
     should_end_session = True
     return build_response(build_speechlet_response(card_title, speech_output, None, should_end_session))
 
-        
 def do_nothing():
     return build_response({})
-
-
-# --------------- Events ------------------
-
-def on_intent(intent_request, session):
-    intent = intent_request['intent']
-    intent_name = intent_request['intent']['name']
-    print("on_intent, session: ")
-    print(session)
-    # Dispatch to your skill's intent handlers
-    if intent_name == "GetDirections":
-        return get_directions(intent, session)
-    elif intent_name == "AMAZON.HelpIntent":
-        return get_help()
-    elif intent_name == "AMAZON.CancelIntent":
-        return do_nothing()
-    elif intent_name == "AMAZON.StopIntent":
-        return do_nothing()
-    else:
-        raise ValueError("Invalid intent")
-
-
-
