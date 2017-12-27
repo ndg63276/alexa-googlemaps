@@ -51,48 +51,149 @@ For even more information, see the guide to [API keys][apikey].
 
 1. Go to http://aws.amazon.com/. You will need to set-up an AWS account (the basic one will do fine) if you don't have one already. Make sure you use the same Amazon account that your Echo device is registered to. **Note - you will need a credit or debit card to set up an AWS account - there is no way around this. Please see the AWS Charges section above**
 2.  Go to the drop down "Location" menu at the top right and ensure you select US-East (N. Virginia) if you are based in the US or EU(Ireland) if you are based in the UK or Germany. This is important as only these two regions support Alexa. 
-1. Select Lambda from the AWS Services menu at the top left
-2. Click on the "Create a Lambda Function" or "Get Started Now" button.
-3. Select "Blank Function" - this will automatically take you to the "Configure triggers" page.
-4. Click the dotted box and select "Alexa Skills Kit" (NOTE - if you do not see Alexa Skill Kit as an option then you are in the wrong AWS region).
-5. Click Next 
-5. Name the Lambda Function :-
+3. Select Lambda from the AWS Services menu at the top left
+4. Click on the "Create a Lambda Function" or "Get Started Now" button.
+5. Select "Blank Function" - this will automatically take you to the "Configure triggers" page.
+6. Click the dotted box and select "Alexa Skills Kit" (NOTE - if you do not see Alexa Skill Kit as an option then you are in the wrong AWS region).
+7. Click Next 
+8. Name the Lambda Function :-
 
     ```
     Google Maps
     ```
     
-5. Set the decription as :-
+9. Set the decription as :-
 
     ```
     Google Maps
     ```
     
     
-6. Select the runtime as "Python 2.7".
-7. Select Code entry type as "Upload a .ZIP file". 
-
-
-7. Click on the "Upload" button. Go to the folder where you unzipped the files you downloaded from Github, select Alexa-GoogleMaps.zip and click open. Do not upload the alexa-googlemaps-master.zip you downloaded from Github - only the Alexa-GoogleMaps.zip contained within it.
-8. Enter the following into the Environment Variables Section (If you are pasting in the API Key and Token then make sure you have no extra spaces: -
-
+10. Select the runtime as "Python 2.7".
+11. Select Code entry type as "Upload a .ZIP file". 
+12. Click on the "Upload" button. Go to the folder where you unzipped the files you downloaded from Github, select Alexa-GoogleMaps.zip and click open. Do not upload the alexa-googlemaps-master.zip you downloaded from Github - only the Alexa-GoogleMaps.zip contained within it.
+13. Enter the following into the Environment Variables Section (If you are pasting in the API Key and Token then make sure you have no extra spaces: -
 |Key           | Value|
 |--------------| -----|
 |API_KEY|(Put the Google API key in here)|
 |COUNTRY|(Put your country name in here, eg UK, USA)|
 |HOME|(Put your home address in here)|
 |WORK|(Put your work address in here)|
+14. Keep the Handler as "lambda_function.lambda_handler" (this refers to the main python file in the zip).
+15. Under Role - select "Create a custom role". This will automatically open a new browser tab or window.
+16. Switch to this new tab or window. 
+17. Under IAM Role select "Create a new IAM Role"
+18. Then press the blue "Allow" box at the bottom right hand corner. The tab/window will automatically close.
+19. You should now be back on the Lambda Management page. The Role box will have automatically changed to "Choose an existing role" and Role we just created will be selected under the "Existing role" box.
+20. Click on the blue "Next" at the bottom of the page and review the settings then click "Create Function". This will upload the Alexa-GoogleMaps.zip file to Lambda. This may take a few minutes depending on your connection speed.
+21. Copy the ARN from the top right to be used later in the Alexa Skill Setup (it's the text after ARN - it won't be in bold and will look a bit like this arn:aws:lambda:eu-west-1:XXXXXXX:function:youtube). Hint - Paste it into notepad or similar.
 
 
-9. Keep the Handler as "lambda_function.lambda_handler" (this refers to the main python file in the zip).
-10. Under Role - select "Create a custom role". This will automatically open a new browser tab or window.
-11. Switch to this new tab or window. 
-11. Under IAM Role select "Create a new IAM Role"
-11. Then press the blue "Allow" box at the bottom right hand corner. The tab/window will automatically close.
-11. You should now be back on the Lambda Management page. The Role box will have automatically changed to "Choose an existing role" and Role we just created will be selected under the "Existing role" box.
-13. Click on the blue "Next" at the bottom of the page and review the settings then click "Create Function". This will upload the Alexa-GoogleMaps.zip file to Lambda. This may take a few minutes depending on your connection speed.
+### Alexa Skill Setup
 
-14. Copy the ARN from the top right to be used later in the Alexa Skill Setup (it's the text after ARN - it won't be in bold and will look a bit like this arn:aws:lambda:eu-west-1:XXXXXXX:function:youtube). Hint - Paste it into notepad or similar.
+1. In a new browser tab/window go to the Alexa Console (https://developer.amazon.com/edw/home.html and select Alexa on the top menu)
+1. If you have not registered as an Amazon Developer then you will need to do so. Fill in your details and ensure you answer "NO" for "Do you plan to monetize apps by charging for apps or selling in-app items" and "Do you plan to monetize apps by displaying ads from the Amazon Mobile Ad Network or Mobile Associates?"
+1. Once you are logged into your account go to to the Alexa tab at the top of the page.
+2. Click on the yellow "Get Started" button under Alexa Skills Kit.
+3. Click the "Add a New Skill" yellow box towards the top right.
+4. You will now be on the "Skill Information" page.
+5. Set "Custom Interaction Model" as the Skill type
+6. Select the language as English (US), English (UK), German, English (Australia) or English (India), whichever suits you best. - **Note: For German you will need to do some translation below**
+6. Set the "Name" to 
+
+    ```
+    Google Maps Skill for Alexa
+    ```
+    
+8. Set the "Invocation Name" to 
+
+    ```
+    Google Maps
+    ```
+8. Set the "Audio Player", "Video App", and "Render Template" settings to "No"
+9. Click "Save" and then click "Next".
+10. You will now be on the "Invocation Model" page.
+11. Copy the text below into the "Intent Schema" box - Ignore the "Built-in intents for playback control box above". If you are in the US, replace "AMAZON.GB_CITY" with "AMAZON.US_CITY", or use "AMAZON.DE_CITY" for Germany, "AMAZON.AT_CITY" for Austria, or "AMAZON.EUROPE_CITY" for anywhere else in Europe. For Australia or India, use "AMAZON.City". Canadians don't seem to have an equivalent, sorry.
+
+```
+{
+  "intents": [
+    {
+      "intent": "AMAZON.CancelIntent"
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "GetCommuteToWork"
+    },
+    {
+      "intent": "GetCommuteFromWork"
+    },
+    {
+      "slots": [
+        {
+          "name": "tocity",
+          "type": "AMAZON.GB_CITY"
+        }
+      ],
+      "intent": "GetDirectionsTo"
+    },
+    {
+      "slots": [
+        {
+          "name": "fromcity",
+          "type": "AMAZON.GB_CITY"
+        },
+        {
+          "name": "tocity",
+          "type": "AMAZON.GB_CITY"
+        }
+      ],
+      "intent": "GetDirectionsFromTo"
+    }
+  ]
+}
+```
+
+15. Copy the text below and paste them into the Sample Utterances box. For German, you need to translate these into German, don't change the first word on each line or the words in curly brackets.
+```
+GetCommuteToWork How is my commute
+GetCommuteToWork How is my commute to work
+GetCommuteToWork How is the traffic to work
+GetCommuteToWork How is the drive to work
+GetCommuteToWork My travel time to work
+GetCommuteFromWork How is my commute home
+GetCommuteFromWork How is my commute home from work
+GetCommuteFromWork How is the traffic home
+GetCommuteFromWork How is the drive home
+GetCommuteFromWork My travel time home from work
+GetDirectionsTo Get directions to {tocity}
+GetDirectionsTo How long does it take to get to {tocity}
+GetDirectionsTo How far is {tocity}
+GetDirectionsTo How far away is {tocity}
+GetDirectionsTo How far to {tocity}
+GetDirectionsTo How long to {tocity}
+GetDirectionsTo Give me directions to {tocity}
+GetDirectionsTo For directions to {tocity}
+GetDirectionsFromTo Get directions from {fromcity} to {tocity}
+GetDirectionsFromTo How long does it take to get from {fromcity} to {tocity}
+GetDirectionsFromTo How far is it from {fromcity} to {tocity}
+GetDirectionsFromTo How far from {fromcity} to {tocity}
+GetDirectionsFromTo How long from {fromcity} to {tocity}
+GetDirectionsFromTo Give me directions from {fromcity} to {tocity}
+GetDirectionsFromTo For directions from {fromcity} to {tocity}
+```
+16. Click "Save" and then "Next".
+17. You will now be on the "Configuration" page.
+18. Select "AWS Lambda ARN (Amazon Resource Name)" for the skill Endpoint Type.
+19. Then pick the most appropriate geographical region (either US or EU as appropriate) and paste into the box (highlighted in red in the screenshot) the ARN you copied earlier from the AWS Lambda setup.
+20. Select "No" for Account Linking and leave everything under permissions unchecked
+14. Click "Save" and then "Next".
+15. There is no need to go any further through the process i.e. submitting for certification.
 
 [apikey]: https://developers.google.com/maps/faq#keysystem
 [directions-key]: https://developers.google.com/maps/documentation/directions/get-api-key#key
