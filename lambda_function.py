@@ -7,8 +7,6 @@ from datetime import datetime
 # --------------- Main handler ------------------
 
 def lambda_handler(event, context):
-    if 'session' in event and event['session']['application']['applicationId'] != "amzn1.ask.skill.3b9d626c-fdc8-48d7-87a6-e6a6d988234c":
-        raise ValueError("Invalid Application ID")
     if event['request']['type'] == "LaunchRequest":
         return get_help()
     elif event['request']['type'] == "IntentRequest":
