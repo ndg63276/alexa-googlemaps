@@ -91,28 +91,28 @@ For even more information, see the guide to [API keys][apikey].
 ### Alexa Skill Setup
 
 1. In a new browser tab/window go to the Alexa Console (https://developer.amazon.com/edw/home.html and select Alexa on the top menu)
-1. If you have not registered as an Amazon Developer then you will need to do so. Fill in your details and ensure you answer "NO" for "Do you plan to monetize apps by charging for apps or selling in-app items" and "Do you plan to monetize apps by displaying ads from the Amazon Mobile Ad Network or Mobile Associates?"
-1. Once you are logged into your account go to to the Alexa tab at the top of the page.
-2. Click on the yellow "Get Started" button under Alexa Skills Kit.
-3. Click the "Add a New Skill" yellow box towards the top right.
-4. You will now be on the "Skill Information" page.
-5. Set "Custom Interaction Model" as the Skill type
-6. Select the language as English (US), English (UK), German, English (Australia) or English (India), whichever suits you best. - **Note: For German you will need to do some translation below**
-6. Set the "Name" to 
+2. If you have not registered as an Amazon Developer then you will need to do so. Fill in your details and ensure you answer "NO" for "Do you plan to monetize apps by charging for apps or selling in-app items" and "Do you plan to monetize apps by displaying ads from the Amazon Mobile Ad Network or Mobile Associates?"
+3. Once you are logged into your account go to to the Alexa tab at the top of the page.
+4. Click on the yellow "Get Started" button under Alexa Skills Kit.
+5. Click the "Add a New Skill" yellow box towards the top right.
+6. You will now be on the "Skill Information" page.
+7. Set "Custom Interaction Model" as the Skill type
+8. Select the language as English (US), English (UK), German, English (Australia) or English (India), whichever suits you best. - **Note: For German you will need to do some translation below**
+9. Set the "Name" to 
 
     ```
     Google Maps Skill for Alexa
     ```
     
-8. Set the "Invocation Name" to 
+10. Set the "Invocation Name" to 
 
     ```
     Google Maps
     ```
-8. Set the "Audio Player", "Video App", and "Render Template" settings to "No"
-9. Click "Save" and then click "Next".
-10. You will now be on the "Invocation Model" page.
-11. Copy the text below into the "Intent Schema" box - Ignore the "Built-in intents for playback control box above". If you are in the US, replace "AMAZON.GB_CITY" with "AMAZON.US_CITY", or use "AMAZON.DE_CITY" for Germany, "AMAZON.AT_CITY" for Austria, or "AMAZON.EUROPE_CITY" for anywhere else in Europe. For Australia or India, use "AMAZON.City". Canadians don't seem to have an equivalent, sorry.
+11. Set the "Audio Player", "Video App", and "Render Template" settings to "No"
+12. Click "Save" and then click "Next".
+13. You will now be on the "Invocation Model" page.
+14. Copy the text below into the "Intent Schema" box - Ignore the "Built-in intents for playback control box above". If you are in the UK, replace "AMAZON.US_CITY" with "AMAZON.GB_CITY", or use "AMAZON.DE_CITY" for Germany, "AMAZON.AT_CITY" for Austria, or "AMAZON.EUROPE_CITY" for anywhere else in Europe. For Australia or India, use "AMAZON.City". Canadians, replace "AMAZON.US_CITY" with just "CITY".
 
 ```
 {
@@ -136,7 +136,7 @@ For even more information, see the guide to [API keys][apikey].
       "slots": [
         {
           "name": "tocity",
-          "type": "AMAZON.GB_CITY"
+          "type": "AMAZON.US_CITY"
         }
       ],
       "intent": "GetDirectionsTo"
@@ -145,11 +145,11 @@ For even more information, see the guide to [API keys][apikey].
       "slots": [
         {
           "name": "fromcity",
-          "type": "AMAZON.GB_CITY"
+          "type": "AMAZON.US_CITY"
         },
         {
           "name": "tocity",
-          "type": "AMAZON.GB_CITY"
+          "type": "AMAZON.US_CITY"
         }
       ],
       "intent": "GetDirectionsFromTo"
@@ -157,8 +157,9 @@ For even more information, see the guide to [API keys][apikey].
   ]
 }
 ```
-
-15. Copy the text below and paste them into the Sample Utterances box. **For German, you need to translate these into German, don't change the first word on each line or the words in curly brackets.**
+15. **Canadians Only** Under "Custom Slot Types", in the "Enter Type" box, type CITY. In the "Enter Values" box, paste the contents of CanadianCities.txt, which is in the zip file you downloaded from this github page. 
+Make sure to click "Add" when you have finished.
+16. Copy the text below and paste them into the Sample Utterances box. **For German, you need to translate these into German, don't change the first word on each line or the words in curly brackets.**
 ```
 GetCommuteToWork How is my commute
 GetCommuteToWork How is my commute to work
@@ -186,14 +187,14 @@ GetDirectionsFromTo How long from {fromcity} to {tocity}
 GetDirectionsFromTo Give me directions from {fromcity} to {tocity}
 GetDirectionsFromTo For directions from {fromcity} to {tocity}
 ```
-16. Click "Save" and then "Next".
-17. You will now be on the "Configuration" page.
-18. Select "AWS Lambda ARN (Amazon Resource Name)" for the skill Endpoint Type.
-19. Then pick the most appropriate geographical region (either US or EU as appropriate) and paste into the box (highlighted in red in the screenshot) the ARN you copied earlier from the AWS Lambda setup.
-20. Select "No" for Account Linking
-21. Under Permissions, tick the Device Address box, and select Full Address.
-22. Click "Save" and then "Next".
-23. There is no need to go any further through the process i.e. submitting for certification.
+17. Click "Save" and then "Next".
+18. You will now be on the "Configuration" page.
+19. Select "AWS Lambda ARN (Amazon Resource Name)" for the skill Endpoint Type.
+20. Then pick the most appropriate geographical region (either US or EU as appropriate) and paste into the box (highlighted in red in the screenshot) the ARN you copied earlier from the AWS Lambda setup.
+21. Select "No" for Account Linking
+22. Under Permissions, tick the Device Address box, and select Full Address.
+23. Click "Save" and then "Next".
+24. There is no need to go any further through the process i.e. submitting for certification.
 
 ### Skill Permissions
 
@@ -202,7 +203,7 @@ You need to give the skill permission to see your home address from the Alexa ap
 1. Open the Alexa app and go to "Skills".
 2. In the top right select "Your Skills".
 3. Find the Google Maps skill and select it.
-4. Click "Settings", and then "Manage Settings". If you don't see a Settings button, you didn't ask for the Full Address in step 21 above.
+4. Click "Settings", and then "Manage Settings". If you don't see a Settings button, you didn't ask for the Full Address in step 22 above.
 5. Turn on "Device Address", and click "Save Settings".
 
 
