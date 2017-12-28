@@ -72,13 +72,15 @@ For even more information, see the guide to [API keys][apikey].
 10. Select the runtime as "Python 2.7".
 11. Select Code entry type as "Upload a .ZIP file". 
 12. Click on the "Upload" button. Go to the folder where you unzipped the files you downloaded from Github, select Alexa-GoogleMaps.zip and click open. Do not upload the alexa-googlemaps-master.zip you downloaded from Github - only the Alexa-GoogleMaps.zip contained within it.
-13. Enter the following into the Environment Variables Section (If you are pasting in the API Key and Token then make sure you have no extra spaces: -
+13. Enter the following into the Environment Variables Section (If you are pasting in the API Key and Token then make sure you have no extra spaces:
+
 |Key           | Value|
 |--------------| -----|
-|API_KEY|(Put the Google API key in here)|
-|COUNTRY|(Put your country name in here, eg UK, USA)|
-|WORK|(Put your work address in here)|
-|HOME|(Optional, if you cannot set your home address in the Alexa app, put it here)|
+|API_KEY       |(Put the Google API key in here)|
+|COUNTRY       |(Put your country name in here, eg UK, USA)|
+|WORK          |(Put your work address in here)|
+|HOME          |(Optional, if you cannot set your home address in the Alexa app, put it here)|
+
 14. Keep the Handler as "lambda_function.lambda_handler" (this refers to the main python file in the zip).
 15. Under Role - select "Create a custom role". This will automatically open a new browser tab or window.
 16. Switch to this new tab or window. 
