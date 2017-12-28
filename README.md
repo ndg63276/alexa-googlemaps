@@ -203,7 +203,7 @@ You need to give the skill permission to see your home address from the Alexa ap
 2. In the top right select "Your Skills".
 3. Find the Google Maps skill and select it.
 4. Click "Settings", and then "Manage Settings". If you don't see a Settings button, you didn't ask for the Full Address in step 21 above.
-5. Turn on "Device Address".
+5. Turn on "Device Address", and click "Save Settings".
 
 
 [apikey]: https://developers.google.com/maps/faq#keysystem
