@@ -43,17 +43,23 @@ def get_directions(event):
         start_address = start_postcode = event['request']['intent']['slots']['fromcity']['value']
     else:
         start_address, start_postcode = get_my_address(event)
+        if not start_address:
+            return permissions_error()
     print('start: '+start_address+'; destination: '+destination)
     return get_duration(start_postcode, destination, start_address)
     
 def get_commute_to_work(event):
     start_address, start_postcode = get_my_address(event)
+    if not start_address:
+        return permissions_error()
     destination = get_work_address()
     print('start: '+start_address+'; destination: '+destination)
     return get_duration(start_postcode, destination, start_address)
     
 def get_commute_from_work(event):
     home_address, destination = get_my_address(event)
+    if not home_address:
+        return permissions_error()
     start_address = start_postcode = get_work_address()
     print('start: '+start_address+'; destination: '+destination)
     return get_duration(start_postcode, destination, start_address)
@@ -72,7 +78,7 @@ def get_my_address(event):
         print(r.json())
         return r.json()['addressLine1'], r.json()['postalCode']
     except:
-        return environ['HOME'],environ['HOME']
+        return False, False
 
 def get_work_address():
     return environ['WORK']
@@ -154,9 +160,9 @@ def get_help():
     should_end_session = False
     return build_response(build_speechlet_response(card_title, speech_output, None, should_end_session))
 
-def permissions_error(r):
+def permissions_error():
     speech_output = 'Sorry, I do not know your address. Please check the settings in the Alexa app.'
-    card_title = 'Google Maps error '+str(r.status_code)
+    card_title = 'Google Maps error'
     should_end_session = True
     return build_response(build_speechlet_response(card_title, speech_output, None, should_end_session))
 
