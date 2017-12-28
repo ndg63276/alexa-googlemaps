@@ -78,6 +78,7 @@ For even more information, see the guide to [API keys][apikey].
 |API_KEY|(Put the Google API key in here)|
 |COUNTRY|(Put your country name in here, eg UK, USA)|
 |WORK|(Put your work address in here)|
+|HOME|(Optional, if you cannot set your home address in the Alexa app, put it here)|
 14. Keep the Handler as "lambda_function.lambda_handler" (this refers to the main python file in the zip).
 15. Under Role - select "Create a custom role". This will automatically open a new browser tab or window.
 16. Switch to this new tab or window. 
@@ -199,6 +200,8 @@ GetDirectionsFromTo For directions from {fromcity} to {tocity}
 ### Skill Permissions
 
 You need to give the skill permission to see your home address from the Alexa app.
+If you cannot set your address in the Alexa app, for example if you are in a non-supported country,
+make sure to set the HOME variable in step 13 of the Lambda setup.
 
 1. Open the Alexa app and go to "Skills".
 2. In the top right select "Your Skills".

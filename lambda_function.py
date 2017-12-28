@@ -78,7 +78,10 @@ def get_my_address(event):
         print(r.json())
         return r.json()['addressLine1'], r.json()['postalCode']
     except:
-        return False, False
+        try:
+            return environ['HOME'], environ['HOME']
+        except:
+            return False, False
 
 def get_work_address():
     return environ['WORK']
