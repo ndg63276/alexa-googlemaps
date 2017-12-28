@@ -77,7 +77,6 @@ For even more information, see the guide to [API keys][apikey].
 |--------------| -----|
 |API_KEY|(Put the Google API key in here)|
 |COUNTRY|(Put your country name in here, eg UK, USA)|
-|HOME|(Put your home address in here)|
 |WORK|(Put your work address in here)|
 14. Keep the Handler as "lambda_function.lambda_handler" (this refers to the main python file in the zip).
 15. Under Role - select "Create a custom role". This will automatically open a new browser tab or window.
@@ -193,8 +192,19 @@ GetDirectionsFromTo For directions from {fromcity} to {tocity}
 19. Then pick the most appropriate geographical region (either US or EU as appropriate) and paste into the box (highlighted in red in the screenshot) the ARN you copied earlier from the AWS Lambda setup.
 20. Select "No" for Account Linking
 21. Under Permissions, tick the Device Address box, and select Full Address.
-14. Click "Save" and then "Next".
-15. There is no need to go any further through the process i.e. submitting for certification.
+22. Click "Save" and then "Next".
+23. There is no need to go any further through the process i.e. submitting for certification.
+
+### Skill Permissions
+
+You need to give the skill permission to see your home address from the Alexa app.
+
+1. Open the Alexa app and go to "Skills".
+2. In the top right select "Your Skills".
+3. Find the Google Maps skill and select it.
+4. Click "Settings", and then "Manage Settings". If you don't see a Settings button, you didn't ask for the Full Address in step 21 above.
+5. Turn on "Device Address".
+
 
 [apikey]: https://developers.google.com/maps/faq#keysystem
 [directions-key]: https://developers.google.com/maps/documentation/directions/get-api-key#key
