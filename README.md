@@ -181,8 +181,8 @@ GetDirectionsFromTo For directions from {fromcity} to {tocity}
 17. Click "Save" and then "Next".
 18. You will now be on the "Configuration" page.
 19. Select "AWS Lambda ARN (Amazon Resource Name)" for the skill Endpoint Type.
-20. Then pick the most appropriate geographical region (either US or EU as appropriate) and paste into the box (highlighted in red in the screenshot) the ARN you copied earlier from the AWS Lambda setup.
-21. Select "No" for Account Linking
+20. Where it says "Default", paste into the box the ARN you copied earlier from the AWS Lambda setup.
+21. Select "No" for "Provide geographical region endpoints?" and also select "No" for Account Linking
 22. Under Permissions, tick the Device Address box, and select Full Address.
 23. Click "Save" and then "Next".
 24. There is no need to go any further through the process i.e. submitting for certification.
