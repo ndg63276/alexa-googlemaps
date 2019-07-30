@@ -82,110 +82,25 @@ For even more information, see the guide to [API keys][apikey].
 
 ### Alexa Skill Setup
 
-1. In a new browser tab/window go to the Alexa Console (https://developer.amazon.com/home.html and select Alexa on the top menu)
+1. In a new browser tab/window go to the Alexa Console (https://developer.amazon.com/home.html and select Alexa, then Alexa Skills Kit on the top menu)
 2. If you have not registered as an Amazon Developer then you will need to do so. Fill in your details and ensure you answer "NO" for "Do you plan to monetize apps by charging for apps or selling in-app items" and "Do you plan to monetize apps by displaying ads from the Amazon Mobile Ad Network or Mobile Associates?"
-3. Once you are logged into your account go to to the Alexa tab at the top of the page.
-4. Click on the yellow "Get Started" button under Alexa Skills Kit.
-5. Click the "Add a New Skill" yellow box towards the top right.
-6. You will now be on the "Skill Information" page.
-7. Set "Custom Interaction Model" as the Skill type
-8. Select the language as English (US), English (UK), German, English (Australia) or English (India), whichever suits you best. - **Note: For German you will need to do some translation below**
-9. Set the "Name" to 
-
-    ```
-    Google Maps
-    ```
-    
-10. Set the "Invocation Name" to 
-
-    ```
-    Google Maps
-    ```
-11. Set the "Audio Player", "Video App", and "Render Template" settings to "No"
-12. Click "Save" and then click "Next".
-13. You will now be on the "Invocation Model" page.
-14. Copy the text below into the "Intent Schema" box - Ignore the "Built-in intents for playback control box above". If you are in the UK, replace "AMAZON.US_CITY" with "AMAZON.GB_CITY", or use "AMAZON.DE_CITY" for Germany, "AMAZON.AT_CITY" for Austria, or "AMAZON.EUROPE_CITY" for anywhere else in Europe. For Australia or India, use "AMAZON.City". Canadians, or others, replace "AMAZON.US_CITY" with just "CITY", and make sure to follow step 15.
-
-```
-{
-  "intents": [
-    {
-      "intent": "AMAZON.CancelIntent"
-    },
-    {
-      "intent": "AMAZON.HelpIntent"
-    },
-    {
-      "intent": "AMAZON.StopIntent"
-    },
-    {
-      "intent": "GetCommuteToWork"
-    },
-    {
-      "intent": "GetCommuteFromWork"
-    },
-    {
-      "slots": [
-        {
-          "name": "tocity",
-          "type": "AMAZON.US_CITY"
-        }
-      ],
-      "intent": "GetDirectionsTo"
-    },
-    {
-      "slots": [
-        {
-          "name": "fromcity",
-          "type": "AMAZON.US_CITY"
-        },
-        {
-          "name": "tocity",
-          "type": "AMAZON.US_CITY"
-        }
-      ],
-      "intent": "GetDirectionsFromTo"
-    }
-  ]
-}
-```
-15. **Canadians Or Others Only** Under "Custom Slot Types", in the "Enter Type" box, type CITY. In the "Enter Values" box, type in the names of as many cities in your country as you can, one on each line. Canadians can paste the contents of CanadianCities.txt, which is in the zip file you downloaded from this github page. Make sure to click "Add" when you have finished.
-16. Copy the text below and paste them into the Sample Utterances box. **For German, you need to translate these into German, don't change the first word on each line or the words in curly brackets.**
-```
-GetCommuteToWork How is my commute
-GetCommuteToWork How is my commute to work
-GetCommuteToWork How is the traffic to work
-GetCommuteToWork How is the drive to work
-GetCommuteToWork My travel time to work
-GetCommuteFromWork How is my commute home
-GetCommuteFromWork How is my commute home from work
-GetCommuteFromWork How is the traffic home
-GetCommuteFromWork How is the drive home
-GetCommuteFromWork My travel time home from work
-GetDirectionsTo Get directions to {tocity}
-GetDirectionsTo How long does it take to get to {tocity}
-GetDirectionsTo How far is {tocity}
-GetDirectionsTo How far away is {tocity}
-GetDirectionsTo How far to {tocity}
-GetDirectionsTo How long to {tocity}
-GetDirectionsTo Give me directions to {tocity}
-GetDirectionsTo For directions to {tocity}
-GetDirectionsFromTo Get directions from {fromcity} to {tocity}
-GetDirectionsFromTo How long does it take to get from {fromcity} to {tocity}
-GetDirectionsFromTo How far is it from {fromcity} to {tocity}
-GetDirectionsFromTo How far from {fromcity} to {tocity}
-GetDirectionsFromTo How long from {fromcity} to {tocity}
-GetDirectionsFromTo Give me directions from {fromcity} to {tocity}
-GetDirectionsFromTo For directions from {fromcity} to {tocity}
-```
-17. Click "Save" and then "Next".
-18. You will now be on the "Configuration" page.
-19. Select "AWS Lambda ARN (Amazon Resource Name)" for the skill Endpoint Type.
-20. Where it says "Default", paste into the box the ARN you copied earlier from the AWS Lambda setup.
-21. Select "No" for "Provide geographical region endpoints?" and also select "No" for Account Linking.
-22. Under Permissions, tick the Device Address box, and select Full Address.
-23. Click "Save" and then "Next".
-24. There is no need to go any further through the process i.e. submitting for certification.
+3. Once you are logged into your account go to to Alexa, then Alexa Skills Kit at the top of the page.
+4. Click the "Create Skill" clue box towards the top right.
+5. You will now be on the "Create a new skill" page. Name your skill Google Maps.
+6. Select the language as English (US), English (UK), whichever suits you best.
+7. Under "Choose a model to add to your skill", select Custom.
+8. Under "Choose a method to host your skill's backend resources", select "Provision Your Own".
+9. Click "Create Skill" in the top right.
+10. Under "Choose a template", select "Start from scratch", and click "Choose".
+11. On the left, find where it says JSON Editor, and click on it.
+12. Delete everything in the box that appears, then copy in the contents of InteractionModel_US.json or InteractionModel_GB.json, depending on your location. Click "Save Model" at the top.
+13. Click "Endpoint" on the left.
+14. Select "AWS Lambda ARN" for the Service Endpoint Type.
+15. Where it says "Default Region", paste into the box the ARN you copied earlier from the AWS Lambda setup. Click "Save Endpoints" at the top.
+16. Find and click "Permissions" at the bottom left, turn on Device Address, and select Full Address.
+17. Click "Custom" on the left, then "Invocation". Then click "Build Model" at the top. Building takes about a minute.
+18. Go to the "Test" tab at the top. Where it says "Test is disabled for this skill", change the dropdown to "Development".
+19. There is no need to go any further through the process i.e. submitting for certification.
 
 ### Skill Permissions
 
@@ -193,10 +108,10 @@ You need to give the skill permission to see your home address from the Alexa ap
 If you cannot set your address in the Alexa app, for example if you are in a non-supported country,
 make sure to set the HOME variable in step 15 of the Lambda setup.
 
-1. Open the Alexa app and go to "Skills".
-2. In the top right select "Your Skills".
+1. Open the Alexa app and go to "Skills & Games".
+2. In the top right select "Your Skills", then scroll right and click "Dev".
 3. Find the Google Maps skill and select it.
-4. Click "Settings", and then "Manage Settings". If you don't see a Settings button, you didn't ask for the Full Address in step 22 above.
+4. Click "Settings", and then "Manage Settings". If you don't see a Settings button, you didn't ask for the Full Address in step 16 above.
 5. Turn on "Device Address", and click "Save Settings".
 
 
