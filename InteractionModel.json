@@ -42,7 +42,7 @@
                     "slots": [
                         {
                             "name": "tocity",
-                            "type": "AMAZON.GB_CITY"
+                            "type": "AMAZON.City"
                         }
                     ],
                     "samples": [
@@ -61,11 +61,11 @@
                     "slots": [
                         {
                             "name": "fromcity",
-                            "type": "AMAZON.GB_CITY"
+                            "type": "AMAZON.City"
                         },
                         {
                             "name": "tocity",
-                            "type": "AMAZON.GB_CITY"
+                            "type": "AMAZON.City"
                         }
                     ],
                     "samples": [
