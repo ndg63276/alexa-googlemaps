@@ -58,13 +58,13 @@ For even more information, see the guide to [API keys][apikey].
     ```
     GoogleMaps
     ```
-6. Select the runtime as "Python 2.7".
+6. Select the runtime as "Python 3.7".
 7. Set the Role as "Create a Custom Role".
 8. In the new window that opens, set the IAM Role as "Create a New IAM Role", and set the Role Name as "lambda_basic_execution", then click Allow.
 9. Back in the Lambda Management window, click "Create Function".
 10. Under "Add Triggers", select "Alexa Skills Kit" (NOTE - if you do not see Alexa Skill Kit as an option then you are in the wrong AWS region). Under "Configure Triggers", click "Add".
 11. In the middle of the screen, click on the box that says "GoogleMaps".
-12. Under "Function Code", make sure Runtime says "Python 2.7", and Handler says "lambda_function.lambda_handler"
+12. Under "Function Code", make sure Runtime says "Python 3.7", and Handler says "lambda_function.lambda_handler"
 13. Under "Code Entry Type", select "Upload a .ZIP file".
 14. Click on the "Upload" button. Go to the folder where you unzipped the files you downloaded from Github, select Alexa-GoogleMaps.zip and click open. Do not upload the alexa-googlemaps-master.zip you downloaded from Github - only the Alexa-GoogleMaps.zip contained within it.
 15. Enter the following into the Environment Variables Section (If you are pasting in the API Key then make sure you have no extra spaces):
